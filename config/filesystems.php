@@ -61,7 +61,7 @@ return [
         ],
         'public_html' => [
             'driver' => 'local',
-            'root' => dirname(base_path()) . '/public_html/uploads',
+            'root' => env('PUBLIC_HTML_PATH', dirname(base_path()) . '/public_html/uploads'),
             'url' => env('APP_URL') . '/uploads',
             'visibility' => 'public',
         ],
