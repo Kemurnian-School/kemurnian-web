@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\HeroController;
 use App\Http\Controllers\Admin\KurikulumController;
 use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\EnrollmentController;
+use App\Http\Controllers\Admin\FasilitasController;
 
 Route::prefix('admin')->group(function () {
     Route::get('/', [DashboardController::class, 'index']);
@@ -44,4 +45,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/enrollment/edit/{id}', [EnrollmentController::class, 'edit'])->name('enrollment.edit');
     Route::put('/enrollment/{id}', [EnrollmentController::class, 'update'])->name('enrollment.update');
     Route::delete('/enrollment/{id}/image', [EnrollmentController::class, 'deleteImage'])->name('enrollment.image.delete');
+
+    // Fasilitas
+    Route::get('/fasilitas', [FasilitasController::class, 'index'])->name('fasilitas');
+    Route::get('/fasilitas/create', [FasilitasController::class, 'create'])->name('fasilitas.create');
+    Route::post('/fasilitas', [FasilitasController::class, 'store'])->name('fasilitas.store');
+    Route::delete('/fasilitas/{id}', [FasilitasController::class, 'destroy'])->name('fasilitas.destroy');
 });
