@@ -9,11 +9,11 @@ use App\Http\Controllers\Admin\EnrollmentController;
 use App\Http\Controllers\Admin\FasilitasController;
 use App\Http\Controllers\Guest\SiteController;
 
-Route::prefix('admin')->group(function () {
+Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/', [DashboardController::class, 'index']);
 });
 
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     // Hero
@@ -67,3 +67,5 @@ Route::get('/unit/{detail}', [SiteController::class, 'unitDetail'])->name('unit.
 Route::get('/{sekolah}', [SiteController::class, 'sekolah'])
     ->where('sekolah', 'sekolah-kemurnian-(1|2|3)')
     ->name('sekolah.detail');
+
+require __DIR__ . '/auth.php';
