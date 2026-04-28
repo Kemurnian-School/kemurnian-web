@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\HeroController;
 use App\Http\Controllers\Admin\KurikulumController;
 use App\Http\Controllers\Admin\NewsController;
+use App\Http\Controllers\Admin\EnrollmentController;
 
 Route::prefix('admin')->group(function () {
     Route::get('/', [DashboardController::class, 'index']);
@@ -35,12 +36,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/news/edit/{id}', [NewsController::class, 'edit'])->name('news.edit');
     Route::put('/news/{id}', [NewsController::class, 'update'])->name('news.update');
     Route::delete('/news/{id}', [NewsController::class, 'destroy'])->name('news.destroy');
-});
 
-Route::get('/debug-hero', function () {
-    $hero = \App\Models\Hero::first();
-    return [
-        'raw' => $hero->getRawOriginal('desktop_image'),
-        'accessor' => $hero->desktop_image,
-    ];
+    // Enrollment
+    Route::get('/enrollment', [EnrollmentController::class, 'index'])->name('enrollment');
+    Route::get('/enrollment/create', [EnrollmentController::class, 'create'])->name('enrollment.create');
+    Route::post('/enrollment', [EnrollmentController::class, 'store'])->name('enrollment.store');
+    Route::get('/enrollment/edit/{id}', [EnrollmentController::class, 'edit'])->name('enrollment.edit');
+    Route::put('/enrollment/{id}', [EnrollmentController::class, 'update'])->name('enrollment.update');
+    Route::delete('/enrollment/{id}/image', [EnrollmentController::class, 'deleteImage'])->name('enrollment.image.delete');
 });
