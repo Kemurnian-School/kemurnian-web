@@ -36,7 +36,7 @@ export default function QuillRenderer({ content, className = '' }: QuillRenderer
   })
 
   return (
-    <div className={`quill-renderer ${className}`}>
+    <div className={`quill-renderer font-merriweather ${className}`}>
       <div
         dangerouslySetInnerHTML={{ __html: cleanContent }}
         className="quill-content"
