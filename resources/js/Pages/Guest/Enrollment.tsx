@@ -2,54 +2,50 @@ import GuestLayout from '@/Layouts/GuestLayout'
 import QuillRenderer from '@GuestComponents/QuillRenderer'
 
 interface EnrollmentRecord {
-  id: number
-  title: string
-  body: string
-  date: string
-  image_url?: string | null
+    id: number
+    title: string
+    body: string
+    date: string
+    image_url?: string | null
 }
 
 export default function Enrollment({ enrollment }: { enrollment?: EnrollmentRecord | null }) {
-  return (
-    <div className="py-12">
-      <section className="mx-auto max-w-4xl px-4">
-        {enrollment ? (
-          <>
-            <div className="flex flex-col md:flex-row gap-8 items-start">
-              {enrollment.image_url && (
-                <img
-                  src={enrollment.image_url}
-                  alt={enrollment.title}
-                  width={480}
-                  height={320}
-                  className="rounded-lg object-cover w-full md:w-1/2"
-                />
-              )}
-              <div>
-                <h2 className="font-raleway font-extrabold text-2xl mb-2">
-                  {enrollment.title}
-                </h2>
-                <p className="text-sm text-gray-500 mb-4">
-                  {new Date(enrollment.date).toLocaleDateString('id-ID', {
-                    day: 'numeric',
-                    month: 'long',
-                    year: 'numeric',
-                  })}
+    return (
+        <main className="flex flex-col items-center justify-center mt-10 mx-5 md:mx-0">
+            {enrollment ? (
+                <>
+                    <h1 className="text-center tracking-widest font-raleway font-extrabold text-lg md:text-2xl text-[#252525]">
+                        {enrollment.title}
+                    </h1>
+                    <hr className="mx-auto my-5 w-[240px] border-t-[4px] border-solid border-[#8b0000]" />
+                    {enrollment.image_url && (
+                        <img
+                            src={enrollment.image_url}
+                            alt={enrollment.title}
+                            width={450}
+                            height={450}
+                            className="mb-6"
+                        />
+                    )}
+                    <h2 className="font-raleway font-bold text-md md:text-lg mb-10">
+                        {new Date(enrollment.date).toLocaleDateString('id-ID', {
+                            day: 'numeric',
+                            month: 'long',
+                            year: 'numeric',
+                        })}
+                    </h2>
+                    <QuillRenderer
+                        content={enrollment.body}
+                        className="max-w-2xl font-merriweather font-light text-xs md:text-lg leading-loose"
+                    />
+                </>
+            ) : (
+                <p className="font-merriweather text-center text-sm md:text-base">
+                    Informasi penerimaan siswa belum tersedia.
                 </p>
-              </div>
-            </div>
-            <div className="mt-8">
-              <QuillRenderer content={enrollment.body} />
-            </div>
-          </>
-        ) : (
-          <p className="font-merriweather text-center text-sm md:text-base">
-            Informasi penerimaan siswa belum tersedia.
-          </p>
-        )}
-      </section>
-    </div>
-  )
+            )}
+        </main>
+    )
 }
 
 Enrollment.layout = (page: React.ReactNode) => <GuestLayout>{page}</GuestLayout>
