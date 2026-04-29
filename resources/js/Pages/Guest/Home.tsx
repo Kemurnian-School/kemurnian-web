@@ -58,11 +58,11 @@ export default function Home({ hero, kurikulum, latestNews, enrollment }: HomePr
         <HeroSliders images={hero} />
       </div>
 
-      <div id="schools-info">
+      <div id="schools-info" className="bg-[#ecf0f1]">
         <SchoolsInfo />
       </div>
 
-      <section id="about" className="flex flex-col justify-center items-center px-4">
+      <section id="about" className="flex flex-col justify-center items-center px-4 bg-[#ecf0f1]">
         <SectionHeader title="TENTANG KAMI" as="h2" />
         <p className="mx-4 max-w-4xl mt-6 font-merriweather font-[100] leading-loose tracking-wider text-xs md:text-lg text-justify md:text-center">
           Sekolah Kemurnian pertama didirikan dengan nama TK Kemurnian, pada tanggal 2
