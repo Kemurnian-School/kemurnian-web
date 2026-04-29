@@ -1,58 +1,121 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Kemurnian Web
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Kemurnian Web is a Laravel 13 + Inertia React application for Sekolah Kemurnian. It includes a public site (guest pages) and an admin dashboard for managing content.
 
-## About Laravel
+## Available Pages
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Public:
+- `/` Home (hero slider, schools info, about, curriculum, news, enrollment, contact)
+- `/about`
+- `/news`
+- `/news/category/{slug}`
+- `/news-detail/{id}`
+- `/enrollment`
+- `/kurikulum/{id}`
+- `/unit/{detail}`
+- `/{sekolah}` (sekolah-kemurnian-1/2/3)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Admin (requires login):
+- `/admin` Dashboard
+- `/admin/hero`
+- `/admin/kurikulum`
+- `/admin/news`
+- `/admin/enrollment`
+- `/admin/fasilitas`
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Auth:
+- `/login` (admin login)
 
-## Learning Laravel
+## Project Structure
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Key folders:
+- `app/Http/Controllers/Admin` Admin CRUD controllers
+- `app/Http/Controllers/Guest` Public site controller
+- `app/Http/Controllers/Auth` Login controller
+- `app/Http/Middleware` Admin guard
+- `database/migrations` Schema and content tables
+- `resources/js/Pages` Inertia pages
+- `resources/js/Components` Shared UI components
+- `resources/js/Layouts` Layout wrappers
+- `resources/js/data` JSON data (schools)
+- `resources/css` Tailwind and theme variables
+- `routes/web.php` Public + admin routes
+- `routes/auth.php` Login/logout routes
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## How The App Works
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+High-level flow:
+- `routes/web.php` maps URLs to controllers.
+- Public routes use `Guest/SiteController` and render Inertia pages in `resources/js/Pages/Guest`.
+- Admin routes are protected by `auth` + `admin` middleware and render pages in `resources/js/Pages/Admin`.
+- Image uploads are stored in `public/uploads` and mapped to public URLs.
+- Schools info for `/unit/{detail}` and `/{sekolah}` comes from `resources/js/data/schools.json`.
 
-## Agentic Development
+Data flow:
+- Controllers fetch Eloquent models and normalize data (image URLs, dates).
+- Inertia passes props to React pages.
+- Pages render with `GuestLayout` or `AdminLayout` and shared components.
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Admin Accounts
+
+Create admin users from the CLI:
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+php artisan admin:create "Admin Name" admin@example.com "StrongPass123"
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+## Development Guide
 
-## Contributing
+### Local Dev With Laravel Sail
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+1. Start containers:
 
-## Code of Conduct
+```bash
+./vendor/bin/sail up -d
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+2. Install dependencies and build assets:
 
-## Security Vulnerabilities
+```bash
+./vendor/bin/sail composer install
+./vendor/bin/sail npm install
+./vendor/bin/sail npm run dev
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+3. Run migrations:
 
-## License
+```bash
+./vendor/bin/sail artisan migrate
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Local Dev With Nix
+
+Assuming you already have PHP, Composer, Node, and pnpm/npm via Nix:
+
+1. Install PHP dependencies:
+
+```bash
+composer install
+```
+
+2. Install JS dependencies:
+
+```bash
+pnpm install
+# or: npm install
+```
+
+3. Run migrations and dev server:
+
+```bash
+php artisan migrate
+pnpm dev
+# or: npm run dev
+```
+
+### Production Notes
+
+- Set `APP_ENV=production` and `APP_DEBUG=false` in `.env`.
+- Point your web root to `public/` (or deploy `public/` into `public_html/`).
+- Run `php artisan migrate --force` after deploy.
+- Build assets with `pnpm build` or `npm run build` and deploy `public/build`.
