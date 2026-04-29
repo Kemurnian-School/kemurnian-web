@@ -20,7 +20,7 @@ export default function EnrollmentIndex({ enrollment }: { enrollment: Enrollment
           <ActionButton href="/admin/enrollment/create" label="+ Add Enrollment" />
         </div>
       ) : (
-        <div className="p-6 bg-white rounded shadow flex md:flex-row justify-between items-start md:items-center gap-4">
+        <div className="p-6 bg-white rounded shadow flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <h2 className="text-xl font-semibold text-gray-900">
               {enrollment.title}

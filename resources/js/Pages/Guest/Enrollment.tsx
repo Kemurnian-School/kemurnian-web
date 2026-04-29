@@ -1,6 +1,5 @@
 import GuestLayout from '@/Layouts/GuestLayout'
 import QuillRenderer from '@GuestComponents/QuillRenderer'
-import SectionHeader from '@GuestComponents/SectionHeader'
 
 interface EnrollmentRecord {
   id: number
@@ -13,7 +12,6 @@ interface EnrollmentRecord {
 export default function Enrollment({ enrollment }: { enrollment?: EnrollmentRecord | null }) {
   return (
     <div className="py-12">
-      <SectionHeader title="PENERIMAAN SISWA" as="h1" />
       <section className="mx-auto max-w-4xl px-4">
         {enrollment ? (
           <>
