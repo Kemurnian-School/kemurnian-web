@@ -2,6 +2,7 @@ import { Head } from '@inertiajs/react'
 import AdminLayout from '@/Layouts/AdminLayout'
 import ActionButton from '@AdminComponents/ActionButton'
 import { Link } from '@inertiajs/react'
+import { RiEditLine } from '@remixicon/react'
 
 interface EnrollmentItem {
     id: number
@@ -40,8 +41,9 @@ export default function EnrollmentIndex({ enrollment }: { enrollment: Enrollment
 
                         <Link
                             href={`/admin/enrollment/edit/${enrollment.id}`}
-                            className="px-4 py-2 bg-btn-primary text-white rounded hover:bg-red-primary transition-colors"
+                            className="px-4 py-2 bg-btn-primary flex items-center gap-1 text-white rounded-full hover:bg-red-primary transition-colors"
                         >
+                            <RiEditLine size={17} />
                             Edit
                         </Link>
                     </div>
