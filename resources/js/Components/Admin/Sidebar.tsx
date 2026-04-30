@@ -33,7 +33,7 @@ export default function AdminSidebar() {
 
       <button
         onClick={() => router.post('/logout')}
-        className="flex justify-center items mx-2 mb-2 py-2 bg-white transition-transform active:scale-95 cursor-pointer rounded-full text-red-primary gap-1"
+        className="flex justify-center items-center mx-2 mb-2 py-2 bg-white transition-transform active:scale-95 cursor-pointer rounded-full text-red-primary gap-1"
       >
         <RiLogoutBoxLine size={20} />
         Logout
