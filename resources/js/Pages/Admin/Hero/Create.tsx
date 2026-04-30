@@ -113,13 +113,13 @@ export default function HeroCreate() {
           type="button"
           onClick={handleSubmit}
           disabled={isSubmitting || isAnyCompressing}
-          className={`px-4 py-2 rounded text-white transition-colors ${isSubmitting || isAnyCompressing ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'}`}
+          className={`px-4 py-2 rounded-full text-white transition-colors cursor-pointer ${isSubmitting || isAnyCompressing ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'}`}
         >
-          {isSubmitting ? 'Saving...' : isAnyCompressing ? 'Compressing...' : 'Save Hero Banner'}
+          {isSubmitting ? 'Saving...' : isAnyCompressing ? 'Compressing...' : 'Save'}
         </button>
       </div>
     </div>
-    </> 
+    </>
   )
 }
 
