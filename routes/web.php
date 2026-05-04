@@ -71,3 +71,37 @@ Route::get('/{sekolah}', [SiteController::class, 'sekolah'])
     ->name('sekolah.detail');
 
 require __DIR__ . '/auth.php';
+
+
+Route::redirect('/index.php', '/', 301);
+Route::redirect('/about.html', '/about', 301);
+Route::redirect('/sekolah-kemurnian-1.html', '/sekolah-kemurnian-1', 301);
+Route::redirect('/sekolah-kemurnian-2.html', '/sekolah-kemurnian-2', 301);
+Route::redirect('/sekolah-kemurnian-3.html', '/sekolah-kemurnian-3', 301);
+Route::redirect('/promo-open-24.html', '/enrollment', 301);
+
+// Curriculum Pages
+Route::redirect('/kurikulum-tk.html', '/kurikulum/1', 301);
+Route::redirect('/kurikulum-tkbil.html', '/kurikulum/2', 301);
+Route::redirect('/kurikulum-sd.html', '/kurikulum/3', 301);
+Route::redirect('/kurikulum-smp.html', '/kurikulum/4', 301);
+Route::redirect('/kurikulum-sma.html', '/kurikulum/5', 301);
+Route::redirect('/kurikulum-english.html', '/kurikulum/6', 301);
+
+// News Pages
+Route::redirect('/news.html', '/news', 301);
+
+// Unit Kemurnian I
+Route::redirect('/tk-kemurnian-1.html', '/unit/tk-kemurnian-i', 301);
+Route::redirect('/sd-kemurnian-1.html', '/unit/sd-kemurnian-i', 301);
+Route::redirect('/smp-kemurnian-1.html', '/unit/smp-kemurnian-i', 301);
+
+// Unit Kemurnian II
+Route::redirect('/tk-kemurnian-2.html', '/unit/tk-kemurnian-ii', 301);
+Route::redirect('/sd-kemurnian-2.html', '/unit/sd-kemurnian-ii', 301);
+Route::redirect('/smp-kemurnian-2.html', '/unit/smp-kemurnian-ii', 301);
+Route::redirect('/sma-kemurnian-2.html', '/unit/sma-kemurnian-ii', 301);
+
+// Unit Kemurnian III
+Route::redirect('/tk-kemurnian-3.html', '/unit/tk-kemurnian-iii', 301);
+Route::redirect('/sd-kemurnian-3.html', '/unit/sd-kemurnian-iii', 301);
