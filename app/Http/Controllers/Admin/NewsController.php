@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\News;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
@@ -165,16 +164,7 @@ class NewsController extends Controller
     private function storeFile($file, string $folder, string $filename): ?string
     {
         $relativePath = $folder . '/' . $filename;
-
-        if (app()->environment('production')) {
-            Storage::disk('public_html')->putFileAs($folder, $file, $filename);
-            return $relativePath;
-        }
-
-        $destination = public_path('uploads/' . $folder);
-        File::ensureDirectoryExists($destination);
-        $file->move($destination, $filename);
-
+        Storage::disk('public_html')->putFileAs($folder, $file, $filename);
         return $relativePath;
     }
 
@@ -182,16 +172,7 @@ class NewsController extends Controller
     {
         foreach ($paths as $path) {
             $relativePath = ltrim($path, '/');
-
-            if (app()->environment('production')) {
-                Storage::disk('public_html')->delete($relativePath);
-                continue;
-            }
-
-            $fullPath = public_path('uploads/' . $relativePath);
-            if (File::exists($fullPath)) {
-                File::delete($fullPath);
-            }
+            Storage::disk('public_html')->delete($relativePath);
         }
     }
 
