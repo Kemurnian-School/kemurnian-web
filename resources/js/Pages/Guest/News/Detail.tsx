@@ -29,7 +29,9 @@ export default function NewsDetail({ news, otherNews }: { news?: NewsRecord | nu
         )
     }
 
-    const hasEmbed = Boolean(news.embed && news.embed.trim().length > 0)
+    const embedHtml = news.embed ?? ''
+    const hasEmbed = Boolean(embedHtml.trim().length > 0)
+    const isInstagram = /instagram\.com/i.test(embedHtml)
 
     useEffect(() => {
         if (!hasEmbed) return
@@ -70,10 +72,13 @@ export default function NewsDetail({ news, otherNews }: { news?: NewsRecord | nu
                 </p>
 
                 {hasEmbed ? (
-                    <div className="w-full max-w-2xl md:max-w-3xl my-8 flex justify-center">
+                    <div className="w-full my-8 flex justify-center">
                         <div
-                            className="relative w-full aspect-video [&>iframe]:w-full [&>iframe]:h-full [&>iframe]:absolute [&>iframe]:top-0 [&>iframe]:left-0"
-                            dangerouslySetInnerHTML={{ __html: news.embed ?? '' }}
+                            className={isInstagram
+                                ? 'w-full max-w-[540px] [&_blockquote.instagram-media]:mx-auto [&_blockquote.instagram-media]:w-full [&_blockquote.instagram-media]:max-w-[540px]'
+                                : 'w-full max-w-2xl md:max-w-3xl relative aspect-video [&>iframe]:w-full [&>iframe]:h-full [&>iframe]:absolute [&>iframe]:top-0 [&>iframe]:left-0'
+                            }
+                            dangerouslySetInnerHTML={{ __html: embedHtml }}
                         />
                     </div>
                 ) : (
