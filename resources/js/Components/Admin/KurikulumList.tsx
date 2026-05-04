@@ -24,7 +24,8 @@ export default function KurikulumList({ initialKurikulums }: { initialKurikulums
     })
   }
 
-  function stripHtml(html: string) {
+  function stripHtml(html?: string | null) {
+    if (!html) return ''
     return html.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim()
   }
 

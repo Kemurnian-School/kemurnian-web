@@ -33,10 +33,12 @@ export default function KurikulumEdit({ kurikulum }: { kurikulum: Kurikulum }) {
     const handleSubmit = () => {
         setIsSubmitting(true)
 
+        const safeContent = content ?? ''
+
         router.put(`/admin/kurikulum/${kurikulum.id}`, {
             title,
             preview,
-            body: content.replace(/&nbsp;|\u00A0/g, ' '),
+            body: safeContent.replace(/&nbsp;|\u00A0/g, ' '),
         }, {
             onError: () => {
                 setMessage('Failed to update kurikulum.')
