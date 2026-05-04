@@ -13,7 +13,19 @@ class NewsController extends Controller
 {
     public function index()
     {
-        $news = News::orderBy('date', 'desc')->get();
+        $news = News::orderBy('date', 'desc')->get()->map(function (News $item) {
+            $paths = $this->getStoredImages($item);
+
+            return [
+                'id' => $item->id,
+                'title' => $item->title,
+                'body' => $item->body,
+                'date' => $item->date,
+                'from' => $item->from,
+                'embed' => $item->embed,
+                'image_urls' => $this->mapImageUrls($paths),
+            ];
+        });
 
         return Inertia::render('Admin/News/Index', [
             'news' => $news,
