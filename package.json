@@ -20,7 +20,7 @@
     "dependencies": {
         "@inertiajs/react": "^3.0.3",
         "@remixicon/react": "^4.9.0",
-        "react": "^19.2.5",
+        "react": "^19.2.6",
         "react-dom": "^19.2.5",
         "react-quill-new": "^3.8.3",
         "sanitize-html": "^2.13.0"
