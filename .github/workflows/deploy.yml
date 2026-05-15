@@ -3,10 +3,19 @@ name: Deploy to Hostinger
 on:
   push:
     branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      RELEASE_ID: ${{ github.sha }}
+      ARCHIVE_NAME: release-${{ github.sha }}.tar.gz
 
     steps:
       - name: Checkout code
@@ -22,38 +31,50 @@ jobs:
         with:
           version: 10.x
 
-      - name: Install and build assets
+      - name: Install dependencies and build assets
         run: |
-          pnpm install
+          pnpm install --frozen-lockfile
           pnpm run build
 
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          script: |
-            cd ${{ secrets.DOMAIN_ROOT }}/kemurnian-web
-            git pull origin main
-            /opt/alt/php84/usr/bin/php /usr/local/bin/composer install --no-dev --optimize-autoloader
-            /opt/alt/php84/usr/bin/php artisan migrate --force
-            /opt/alt/php84/usr/bin/php artisan config:cache
-            /opt/alt/php84/usr/bin/php artisan route:cache
-            /opt/alt/php84/usr/bin/php artisan view:cache
+      - name: Create release archive
+        run: |
+          LOCAL_ARCHIVE_PATH="/tmp/$ARCHIVE_NAME"
+          tar \
+            --exclude=".git" \
+            --exclude=".github" \
+            --exclude="node_modules" \
+            --exclude="tests" \
+            --exclude="storage/logs/*" \
+            --exclude="storage/framework/cache/*" \
+            --exclude="storage/framework/sessions/*" \
+            --exclude="storage/framework/views/*" \
+            -czf "$LOCAL_ARCHIVE_PATH" .
+          cp "$LOCAL_ARCHIVE_PATH" "$ARCHIVE_NAME"
 
-      - name: Copy built assets to server
+      - name: Upload release archive
         uses: appleboy/scp-action@v1
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          source: "public/build/"
-          target: "${{ secrets.DOMAIN_ROOT }}/kemurnian-web"
+          source: "${{ env.ARCHIVE_NAME }}"
+          target: "${{ secrets.DOMAIN_ROOT }}/tmp"
 
-      - name: Safely sync public directory to public_html
+      - name: Prepare deploy script
+        run: cp .github/scripts/deploy.sh deploy.sh
+
+      - name: Upload deploy script
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          source: "deploy.sh"
+          target: "${{ secrets.DOMAIN_ROOT }}/tmp"
+
+      - name: Deploy release atomically
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -61,5 +82,15 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            rsync -a --delete ${{ secrets.DOMAIN_ROOT }}/kemurnian-web/public/build/ ${{ secrets.DOMAIN_ROOT }}/public_html/build/
-            rsync -a --exclude='index.php' --exclude='.htaccess' ${{ secrets.DOMAIN_ROOT }}/kemurnian-web/public/ ${{ secrets.DOMAIN_ROOT }}/public_html/
+            set -euo pipefail
+            DOMAIN_ROOT="${{ secrets.DOMAIN_ROOT }}"
+            bash "$DOMAIN_ROOT/tmp/deploy.sh" "${{ env.RELEASE_ID }}" "$DOMAIN_ROOT"
+
+      - name: Health check
+        if: ${{ env.HEALTHCHECK_URL != '' }}
+        env:
+          HEALTHCHECK_URL: ${{ secrets.HEALTHCHECK_URL }}
+        run: |
+          curl --fail --silent --show-error \
+            --retry 5 --retry-delay 5 --retry-connrefused \
+            "$HEALTHCHECK_URL"
