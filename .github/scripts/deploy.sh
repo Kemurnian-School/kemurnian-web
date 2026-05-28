@@ -83,6 +83,10 @@ ln -sfn "$RELEASE_PATH" "$CURRENT_LINK"
 
 # Sync public files
 echo "Syncing public files"
+if [ ! -f "$CURRENT_LINK/public/build/manifest.json" ]; then
+  echo "Error: Missing public/build/manifest.json. Build assets are not present."
+  exit 1
+fi
 rsync -a --delete "$CURRENT_LINK/public/build/" "$PUBLIC_HTML/build/"
 rsync -a \
   --exclude='index.php' \
@@ -90,6 +94,9 @@ rsync -a \
   --exclude='assets/' \
   --exclude='uploads/' \
   "$CURRENT_LINK/public/" "$PUBLIC_HTML/"
+if [ -f "$CURRENT_LINK/public/.htaccess" ]; then
+  cp "$CURRENT_LINK/public/.htaccess" "$PUBLIC_HTML/.htaccess"
+fi
 
 # Cleanup old releases (keep max 10)
 echo "Cleaning up old releases (keeping latest 10)"
