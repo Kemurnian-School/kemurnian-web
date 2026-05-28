@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\KurikulumController;
 use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\EnrollmentController;
 use App\Http\Controllers\Admin\FasilitasController;
+use App\Http\Controllers\Admin\AlumniController;
 use App\Http\Controllers\Guest\SiteController;
 
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
@@ -54,6 +55,18 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::get('/fasilitas/create', [FasilitasController::class, 'create'])->name('fasilitas.create');
     Route::post('/fasilitas', [FasilitasController::class, 'store'])->name('fasilitas.store');
     Route::delete('/fasilitas/{id}', [FasilitasController::class, 'destroy'])->name('fasilitas.destroy');
+
+    // Alumni
+    Route::get('/alumni', [AlumniController::class, 'index'])->name('alumni');
+    Route::get('/alumni/create', [AlumniController::class, 'create'])->name('alumni.create');
+    Route::post('/alumni', [AlumniController::class, 'store'])->name('alumni.store');
+    Route::get('/alumni/edit/{alumni}', [AlumniController::class, 'edit'])->name('alumni.edit');
+    Route::put('/alumni/{alumni}', [AlumniController::class, 'update'])->name('alumni.update');
+    Route::delete('/alumni/{alumni}', [AlumniController::class, 'destroy'])->name('alumni.destroy');
+    Route::post('/alumni/universities', [AlumniController::class, 'storeUniversity'])->name('alumni.universities.store');
+    Route::patch('/alumni/universities/{university}', [AlumniController::class, 'updateUniversity'])->name('alumni.universities.update');
+    Route::post('/alumni/job-titles', [AlumniController::class, 'storeJobTitle'])->name('alumni.job-titles.store');
+    Route::patch('/alumni/job-titles/{jobTitle}', [AlumniController::class, 'updateJobTitle'])->name('alumni.job-titles.update');
 });
 
 Route::get('/', [SiteController::class, 'home'])->name('home');
