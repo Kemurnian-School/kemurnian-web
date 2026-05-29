@@ -73,6 +73,7 @@ echo "Running Laravel setup"
 cd "$RELEASE_PATH"
 "$PHP_BIN" "$COMPOSER_BIN" install --no-dev --prefer-dist --optimize-autoloader --no-interaction
 "$PHP_BIN" artisan migrate --force
+"$PHP_BIN" artisan view:clear
 "$PHP_BIN" artisan config:cache
 "$PHP_BIN" artisan route:cache
 "$PHP_BIN" artisan view:cache
@@ -87,8 +88,8 @@ if [ ! -f "$CURRENT_LINK/public/build/manifest.json" ]; then
   echo "Error: Missing public/build/manifest.json. Build assets are not present."
   exit 1
 fi
-rsync -a --delete "$CURRENT_LINK/public/build/" "$PUBLIC_HTML/build/"
-rsync -a \
+rsync -aL --delete "$CURRENT_LINK/public/build/" "$PUBLIC_HTML/build/"
+rsync -aL \
   --exclude='index.php' \
   --exclude='.htaccess' \
   --exclude='assets/' \
