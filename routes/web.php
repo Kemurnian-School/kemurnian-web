@@ -17,6 +17,7 @@ use App\Http\Controllers\Guest\EnrollmentController as PublicEnrollmentControlle
 use App\Http\Controllers\Guest\NewsController as PublicNewsController;
 use App\Http\Controllers\Guest\KurikulumController as PublicKurikulumController;
 use App\Http\Controllers\Guest\SchoolController;
+use App\Http\Controllers\Guest\AlumniController as PublicAlumniController;
 
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/', [DashboardController::class, 'index']);
@@ -82,6 +83,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 Route::get('/', [HomeController::class, 'home'])->name('home');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/enrollment', [PublicEnrollmentController::class, 'enrollment'])->name('enrollment.public');
+Route::get('/alumni', [PublicAlumniController::class, 'alumni'])->name('alumni.public');
 
 Route::get('/news', [PublicNewsController::class, 'newsIndex'])->name('news.public');
 Route::get('/news/category/{slug}', [PublicNewsController::class, 'newsCategory'])->name('news.category');
