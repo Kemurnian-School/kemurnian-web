@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Services\SearchPagesService;
 use Illuminate\Support\ServiceProvider;
+use Inertia\Inertia;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +21,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Inertia::share('searchPages', function () {
+            if (request()->routeIs('admin.*') || request()->is('admin*')) {
+                return [];
+            }
+
+            return app(SearchPagesService::class)->buildSearchPages();
+        });
     }
 }

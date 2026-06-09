@@ -4,11 +4,15 @@ namespace App\Http\Controllers\Guest;
 
 use App\Http\Controllers\Controller;
 use App\Models\Fasilitas;
-use App\Services\GuestPageData;
+use App\Services\MediaUrlService;
 use Inertia\Inertia;
 
 class SchoolController extends Controller
 {
+    public function __construct(private MediaUrlService $mediaUrlService)
+    {
+    }
+
     public function sekolah(string $sekolah)
     {
         $fasilitas = Fasilitas::where('nama_sekolah', $sekolah)
@@ -18,7 +22,7 @@ class SchoolController extends Controller
                 return [
                     'id' => $item->id,
                     'title' => $item->title,
-                    'image_urls' => $this->pageData()->mapImageUrl($item->getRawOriginal('image_url')),
+                    'image_urls' => $this->mediaUrlService->mapImageUrl($item->getRawOriginal('image_url')),
                 ];
             })
             ->values();
@@ -26,7 +30,6 @@ class SchoolController extends Controller
         return Inertia::render('Guest/Schools/Index', [
             'sekolah' => $sekolah,
             'fasilitas' => $fasilitas,
-            'searchPages' => $this->pageData()->buildSearchPages(),
         ]);
     }
 
@@ -34,12 +37,6 @@ class SchoolController extends Controller
     {
         return Inertia::render('Guest/Unit/Detail', [
             'detail' => $detail,
-            'searchPages' => $this->pageData()->buildSearchPages(),
         ]);
-    }
-
-    private function pageData(): GuestPageData
-    {
-        return new GuestPageData();
     }
 }

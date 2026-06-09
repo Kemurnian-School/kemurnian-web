@@ -6,11 +6,18 @@ use App\Http\Controllers\Controller;
 use App\Models\Enrollment;
 use App\Models\Hero;
 use App\Models\Kurikulum;
-use App\Services\GuestPageData;
+use App\Services\EnrollmentMapper;
+use App\Services\NewsMapper;
 use Inertia\Inertia;
 
 class HomeController extends Controller
 {
+    public function __construct(
+        private NewsMapper $newsMapper,
+        private EnrollmentMapper $enrollmentMapper
+    ) {
+    }
+
     public function home()
     {
         $hero = Hero::orderBy('order')->get()->map(function (Hero $item) {
@@ -27,27 +34,20 @@ class HomeController extends Controller
         })->values();
 
         $kurikulum = Kurikulum::orderBy('order')->get();
-        $latestNews = $this->pageData()->getLatestNews();
+        $latestNews = $this->newsMapper->getLatestNews();
         $enrollment = Enrollment::first();
 
         return Inertia::render('Guest/Home', [
             'hero' => $hero,
             'kurikulum' => $kurikulum,
             'latestNews' => $latestNews,
-            'enrollment' => $enrollment ? $this->pageData()->formatEnrollment($enrollment) : null,
-            'searchPages' => $this->pageData()->buildSearchPages(),
+            'enrollment' => $enrollment ? $this->enrollmentMapper->formatEnrollment($enrollment) : null,
         ]);
     }
 
     public function about()
     {
         return Inertia::render('Guest/About', [
-            'searchPages' => $this->pageData()->buildSearchPages(),
         ]);
-    }
-
-    private function pageData(): GuestPageData
-    {
-        return new GuestPageData();
     }
 }
