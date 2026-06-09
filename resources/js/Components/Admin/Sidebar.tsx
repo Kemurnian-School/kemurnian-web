@@ -2,7 +2,7 @@ import { Link, router } from '@inertiajs/react'
 import {
     RiHome9Fill, RiImageFill, RiBookMarkedFill,
     RiNewsFill, RiMegaphone2Fill, RiSettings6Fill, RiLogoutBoxLine,
-    RiGraduationCapFill
+    RiGraduationCapFill, RiPhoneFill
 } from '@remixicon/react'
 
 const linkStyle = "block w-full py-6 pl-6 cursor-pointer text-left border-red-800 transition-all duration-180 ease-in-out hover:bg-red-800 active:bg-red-900 active:scale-95"
@@ -15,7 +15,8 @@ const menuLinks = [
     { href: '/admin/news', label: 'News', Icon: RiNewsFill },
     { href: '/admin/enrollment', label: 'Enrollment', Icon: RiMegaphone2Fill },
     { href: '/admin/fasilitas', label: 'Fasilitas', Icon: RiSettings6Fill },
-    { href: '/admin/alumni', label: 'Alumni', Icon: RiGraduationCapFill }
+    { href: '/admin/alumni', label: 'Alumni', Icon: RiGraduationCapFill },
+    { href: '/admin/contact-links', label: 'Contact Links', Icon: RiPhoneFill }
 ]
 
 export default function AdminSidebar() {
