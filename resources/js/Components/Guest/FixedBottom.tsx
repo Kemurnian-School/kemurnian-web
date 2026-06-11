@@ -31,7 +31,7 @@ export default function FixedBottom() {
       </audio>
 
       <div className="flex flex-col items-center gap-2 pointer-events-auto">
-        <a href="https://linktr.ee/sekolahkemurnian">
+        <a href="/contacts">
           <img src="/assets/whatsapp.svg" width={50} height={50} alt="whatsapp" />
         </a>
 
