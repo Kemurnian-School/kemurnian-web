@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\EnrollmentController;
 use App\Http\Controllers\Admin\FasilitasController;
 use App\Http\Controllers\Admin\AlumniController;
+use App\Http\Controllers\Admin\ContactLinksController;
 
 // Guest
 use App\Http\Controllers\Guest\HomeController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\Guest\NewsController as PublicNewsController;
 use App\Http\Controllers\Guest\KurikulumController as PublicKurikulumController;
 use App\Http\Controllers\Guest\SchoolController;
 use App\Http\Controllers\Guest\AlumniController as PublicAlumniController;
+use App\Http\Controllers\Guest\ContactLinksController as PublicContactLinksController;
 
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/', [DashboardController::class, 'index']);
@@ -77,6 +79,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::patch('/alumni/universities/{university}', [AlumniController::class, 'updateUniversity'])->name('alumni.universities.update');
     Route::post('/alumni/job-titles', [AlumniController::class, 'storeJobTitle'])->name('alumni.job-titles.store');
     Route::patch('/alumni/job-titles/{jobTitle}', [AlumniController::class, 'updateJobTitle'])->name('alumni.job-titles.update');
+
+    // Contact Links
+    Route::get('/contact-links', [ContactLinksController::class, 'index'])->name('contact-links');
+    Route::put('/contact-links/{contactLink}', [ContactLinksController::class, 'update'])
+        ->name('contact-links.update');
 });
 
 // Guest
@@ -94,9 +101,9 @@ Route::get('/unit/{detail}', [SchoolController::class, 'unitDetail'])->name('uni
 Route::get('/{sekolah}', [SchoolController::class, 'sekolah'])
     ->where('sekolah', 'sekolah-kemurnian-(1|2|3)')
     ->name('sekolah.detail');
+Route::get('/contacts', [PublicContactLinksController::class, 'index'])->name('contact-links.public');
 
 require __DIR__ . '/auth.php';
-
 
 // Redirects
 Route::redirect('/index.php', '/', 301);
