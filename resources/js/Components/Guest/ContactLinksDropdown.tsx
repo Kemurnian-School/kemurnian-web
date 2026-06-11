@@ -36,16 +36,16 @@ export default function ContactLinksDropdown({ label, links }: Props) {
     };
 
     return (
-        <div className="relative w-full max-w-[33.6rem] mx-auto mb-4">
+        <div className="relative w-full max-w-sm md:max-w-md mx-auto mb-4">
             {/* Trigger button */}
             <button
                 type="button"
                 onClick={toggle}
-                className="w-full bg-red-primary text-white font-raleway font-bold px-4 py-6 rounded-none flex justify-between items-center"
+                className="w-full bg-red-primary text-lg text-white font-raleway font-bold px-4 py-6 rounded-none flex justify-between items-center"
             >
                 <span>{label}</span>
 
-                {/* Triangle rotation – 600ms */}
+                {/* Triangle rotation */}
                 <svg
                     className={`w-5 h-5 transition-transform duration-600 ${open ? "rotate-180" : "rotate-0"
                         }`}
