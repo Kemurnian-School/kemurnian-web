@@ -21,11 +21,11 @@ class Alumni extends Model
 
     public function university(): BelongsTo
     {
-        return $this->belongsTo(Universities::class, 'university_id');
+        return $this->belongsTo(University::class, 'university_id');
     }
 
     public function jobTitle(): BelongsTo
     {
-        return $this->belongsTo(JobTitles::class, 'job_title_id');
+        return $this->belongsTo(JobTitle::class, 'job_title_id');
     }
 }

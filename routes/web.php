@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
+// Admin
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\HeroController;
 use App\Http\Controllers\Admin\KurikulumController;
@@ -8,12 +10,22 @@ use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\EnrollmentController;
 use App\Http\Controllers\Admin\FasilitasController;
 use App\Http\Controllers\Admin\AlumniController;
-use App\Http\Controllers\Guest\SiteController;
+use App\Http\Controllers\Admin\ContactLinksController;
+
+// Guest
+use App\Http\Controllers\Guest\HomeController;
+use App\Http\Controllers\Guest\EnrollmentController as PublicEnrollmentController;
+use App\Http\Controllers\Guest\NewsController as PublicNewsController;
+use App\Http\Controllers\Guest\KurikulumController as PublicKurikulumController;
+use App\Http\Controllers\Guest\SchoolController;
+use App\Http\Controllers\Guest\AlumniController as PublicAlumniController;
+use App\Http\Controllers\Guest\ContactLinksController as PublicContactLinksController;
 
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/', [DashboardController::class, 'index']);
 });
 
+// Admin
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -60,32 +72,40 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::get('/alumni', [AlumniController::class, 'index'])->name('alumni');
     Route::get('/alumni/create', [AlumniController::class, 'create'])->name('alumni.create');
     Route::post('/alumni', [AlumniController::class, 'store'])->name('alumni.store');
-    Route::get('/alumni/edit/{alumni}', [AlumniController::class, 'edit'])->name('alumni.edit');
-    Route::put('/alumni/{alumni}', [AlumniController::class, 'update'])->name('alumni.update');
-    Route::delete('/alumni/{alumni}', [AlumniController::class, 'destroy'])->name('alumni.destroy');
+    Route::get('/alumni/edit/{id}', [AlumniController::class, 'edit'])->name('alumni.edit');
+    Route::put('/alumni/{id}', [AlumniController::class, 'update'])->name('alumni.update');
+    Route::delete('/alumni/{id}', [AlumniController::class, 'destroy'])->name('alumni.destroy');
     Route::post('/alumni/universities', [AlumniController::class, 'storeUniversity'])->name('alumni.universities.store');
     Route::patch('/alumni/universities/{university}', [AlumniController::class, 'updateUniversity'])->name('alumni.universities.update');
     Route::post('/alumni/job-titles', [AlumniController::class, 'storeJobTitle'])->name('alumni.job-titles.store');
     Route::patch('/alumni/job-titles/{jobTitle}', [AlumniController::class, 'updateJobTitle'])->name('alumni.job-titles.update');
+
+    // Contact Links
+    Route::get('/contact-links', [ContactLinksController::class, 'index'])->name('contact-links');
+    Route::put('/contact-links/{contactLink}', [ContactLinksController::class, 'update'])
+        ->name('contact-links.update');
 });
 
-Route::get('/', [SiteController::class, 'home'])->name('home');
-Route::get('/about', [SiteController::class, 'about'])->name('about');
-Route::get('/enrollment', [SiteController::class, 'enrollment'])->name('enrollment.public');
+// Guest
+Route::get('/', [HomeController::class, 'home'])->name('home');
+Route::get('/about', [HomeController::class, 'about'])->name('about');
+Route::get('/enrollment', [PublicEnrollmentController::class, 'enrollment'])->name('enrollment.public');
+Route::get('/alumni', [PublicAlumniController::class, 'index'])->name('alumni.public');
 
-Route::get('/news', [SiteController::class, 'newsIndex'])->name('news.public');
-Route::get('/news/category/{slug}', [SiteController::class, 'newsCategory'])->name('news.category');
-Route::get('/news-detail/{id}', [SiteController::class, 'newsDetail'])->whereNumber('id')->name('news.detail');
+Route::get('/news', [PublicNewsController::class, 'newsIndex'])->name('news.public');
+Route::get('/news/category/{slug}', [PublicNewsController::class, 'newsCategory'])->name('news.category');
+Route::get('/news-detail/{id}', [PublicNewsController::class, 'newsDetail'])->whereNumber('id')->name('news.detail');
 
-Route::get('/kurikulum/{id}', [SiteController::class, 'kurikulumDetail'])->whereNumber('id')->name('kurikulum.detail');
-Route::get('/unit/{detail}', [SiteController::class, 'unitDetail'])->name('unit.detail');
-Route::get('/{sekolah}', [SiteController::class, 'sekolah'])
+Route::get('/kurikulum/{id}', [PublicKurikulumController::class, 'kurikulumDetail'])->whereNumber('id')->name('kurikulum.detail');
+Route::get('/unit/{detail}', [SchoolController::class, 'unitDetail'])->name('unit.detail');
+Route::get('/{sekolah}', [SchoolController::class, 'sekolah'])
     ->where('sekolah', 'sekolah-kemurnian-(1|2|3)')
     ->name('sekolah.detail');
+Route::get('/contacts', [PublicContactLinksController::class, 'index'])->name('contact-links.public');
 
 require __DIR__ . '/auth.php';
 
-
+// Redirects
 Route::redirect('/index.php', '/', 301);
 Route::redirect('/about.html', '/about', 301);
 Route::redirect('/sekolah-kemurnian-1.html', '/sekolah-kemurnian-1', 301);

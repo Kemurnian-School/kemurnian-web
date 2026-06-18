@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
   };
 
   outputs =
@@ -32,7 +32,7 @@
           php
           php84Packages.composer
           nodejs
-          nodePackages.pnpm
+          pnpm
           postgresql
           openssl
         ];
