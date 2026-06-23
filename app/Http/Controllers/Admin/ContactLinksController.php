@@ -32,10 +32,20 @@ class ContactLinksController extends Controller
             ];
         }
 
+        $contactLinks = ContactLink::withSum('hourlyClicks', 'clicks')->get();
+
+        $clickStats = $contactLinks->map(function ($link) {
+            return [
+                'name' => $link->name,
+                'total_clicks' => $link->hourlyClicks->sum('clicks'),
+            ];
+        })->sortByDesc('total_clicks')->values();
+
         return Inertia::render('Admin/ContactLinks/Index', [
-            'contactLinks' => ContactLink::all(),
+            'contactLinks' => $contactLinks,
             'schoolGroups' => $schoolGroups,
             'schoolLevels' => $schoolLevels,
+            'clickStats' => $clickStats,
         ]);
     }
 
