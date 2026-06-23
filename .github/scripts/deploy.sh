@@ -99,6 +99,8 @@ if [ -f "$CURRENT_LINK/public/.htaccess" ]; then
   cp "$CURRENT_LINK/public/.htaccess" "$PUBLIC_HTML/.htaccess"
 fi
 
+curl -s -m 10 "https://sekolahkemurnian.sch.id/.opcache-reset.php?token=${OPCACHE_TOKEN}" || true
+
 # Cleanup old releases (keep max 10)
 echo "Cleaning up old releases (keeping latest 10)"
 ls -1dt "$RELEASES_DIR"/* | tail -n +11 | xargs -r rm -rf
