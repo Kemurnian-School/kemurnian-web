@@ -84,6 +84,7 @@ jobs:
           script: |
             set -euo pipefail
             DOMAIN_ROOT="${{ secrets.DOMAIN_ROOT }}"
+            export OPCACHE_TOKEN="${{ secrets.OPCACHE_TOKEN }}"
             bash "$DOMAIN_ROOT/tmp/deploy.sh" "${{ env.RELEASE_ID }}" "$DOMAIN_ROOT"
 
       - name: Health check
