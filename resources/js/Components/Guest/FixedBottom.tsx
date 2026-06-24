@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
+import { usePage } from '@inertiajs/react'
 
 export default function FixedBottom() {
+  const { url } = usePage()
   const [showButton, setShowButton] = useState(false)
   const [mounted, setMounted] = useState(false)
 
@@ -31,7 +33,7 @@ export default function FixedBottom() {
       </audio>
 
       <div className="flex flex-col items-center gap-2 pointer-events-auto">
-        <a href="/contacts">
+        <a href="/contacts" className={url === '/contacts' ? 'hidden' : ''}>
           <img src="/assets/whatsapp.svg" width={50} height={50} alt="whatsapp" />
         </a>
 
