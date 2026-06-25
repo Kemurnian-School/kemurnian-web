@@ -24,6 +24,7 @@ export default function NewsCreate() {
   const [isCompressing, setIsCompressing] = useState(false)
   const [successMessage, setSuccessMessage] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
+  const [uploadError, setUploadError] = useState('')
 
   const modules = {
     toolbar: [
@@ -43,19 +44,19 @@ export default function NewsCreate() {
 
     const validFiles = Array.from(files).filter(file => {
       const isValidType = file.type.startsWith('image/')
-      const isValidSize = file.size <= 10 * 1024 * 1024
+      const isValidSize = file.size <= 50 * 1024 * 1024
       return isValidType && isValidSize
     })
 
     if (validFiles.length === 0) {
-      setErrorMessage('Please select valid image files (max 10MB each)')
+      setUploadError('Please select valid image files (max 50MB each)')
       return
     }
 
     if (validFiles.length !== files.length) {
-      setErrorMessage('Some files were skipped. Please only upload images under 10MB.')
+      setUploadError('Some files were skipped. Please only upload images under 50MB.')
     } else {
-      setErrorMessage('')
+      setUploadError('')
     }
 
     setIsCompressing(true)
@@ -194,7 +195,7 @@ export default function NewsCreate() {
         <div>
           <label className="block mb-1 font-medium">Images</label>
           <p className="text-sm text-gray-600 mb-2">
-            Images will be automatically compressed to WebP format (max 1920x1080, 80% quality)
+            Images will be automatically compressed to WebP format (max 1920x1080, 80% quality). Max 50MB each.
           </p>
           <input
             type="file"
@@ -228,6 +229,9 @@ export default function NewsCreate() {
                 ))}
               </div>
             </div>
+          )}
+          {uploadError && (
+            <p className="text-red-500 text-sm mt-2">{uploadError}</p>
           )}
         </div>
 

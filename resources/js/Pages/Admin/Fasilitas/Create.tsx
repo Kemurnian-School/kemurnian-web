@@ -28,6 +28,7 @@ export default function FasilitasCreate({ schoolOptions }: { schoolOptions: Reco
     const [imageToRemove, setImageToRemove] = useState<ImageEntry | null>(null)
     const [status, setStatus] = useState<'idle' | 'compressing' | 'submitting'>('idle')
     const [message, setMessage] = useState('')
+    const [uploadError, setUploadError] = useState('')
     const schoolRef = useRef<HTMLSelectElement>(null)
     const fileInputRef = useRef<HTMLInputElement>(null)
     const uploadAreaRef = useRef<HTMLDivElement>(null)
@@ -48,14 +49,15 @@ export default function FasilitasCreate({ schoolOptions }: { schoolOptions: Reco
         if (!files?.length) return
 
         const validFiles = Array.from(files).filter(
-            (file) => file.type.startsWith('image/') && file.size <= 10 * 1024 * 1024
+            (file) => file.type.startsWith('image/') && file.size <= 50 * 1024 * 1024
         )
 
         if (!validFiles.length) {
-            setMessage('Invalid files. Must be images under 10MB.')
+            setUploadError('Invalid files. Must be images under 50MB.')
             return
         }
 
+        setUploadError('')
         setStatus('compressing')
         setMessage(`Compressing ${validFiles.length} image(s)...`)
 
@@ -196,7 +198,7 @@ export default function FasilitasCreate({ schoolOptions }: { schoolOptions: Reco
                     )}
                 </div>
                 <div>
-                    <label className="block mb-2 font-medium">Upload Images</label>
+                    <label className="block mb-2 font-medium">Upload Images (max 50MB each)</label>
                     <input
                         ref={fileInputRef}
                         type="file"
@@ -265,6 +267,9 @@ export default function FasilitasCreate({ schoolOptions }: { schoolOptions: Reco
                             <span className="mt-2 text-sm font-medium">Add Images</span>
                         </button>
                     </div>
+                    {uploadError && (
+                        <p className="text-red-500 text-sm mt-2">{uploadError}</p>
+                    )}
                     {errors.images && (
                         <p className="text-red-500 text-sm mt-2">{errors.images}</p>
                     )}

@@ -20,9 +20,9 @@ export function useImageCompression() {
 
   const compressImage = async (file: File, deviceType: DeviceType): Promise<File> => {
     const isValidType = file.type.startsWith('image/')
-    const isValidSize = file.size <= 10 * 1024 * 1024
+    const isValidSize = file.size <= 50 * 1024 * 1024
     if (!isValidType || !isValidSize) {
-      throw new Error('Please select a valid image file (max 10MB).')
+      throw new Error('Please select a valid image file (max 50MB).')
     }
 
     setIsCompressing(prev => ({ ...prev, [deviceType]: true }))
