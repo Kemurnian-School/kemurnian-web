@@ -13,9 +13,9 @@ enum SchoolGroup: string
     public function label(): string
     {
         return match ($this) {
-            self::SK1 => 'Sekolah Kemurnian 1',
-            self::SK2 => 'Sekolah Kemurnian 2',
-            self::SK3 => 'Sekolah Kemurnian 3',
+            self::SK1 => 'Sekolah Kemurnian - Kota',
+            self::SK2 => 'Sekolah Kemurnian II - Greenville',
+            self::SK3 => 'Sekolah Kemurnian III - Citra',
         };
     }
 }
