@@ -49,10 +49,12 @@ export default function SchoolIndex({ sekolah, fasilitas }: SchoolIndexProps) {
                 <div className="flex items-center justify-center mb-8 w-full h-48 md:h-86 bg-red-primary text-white text-2xl md:text-6xl font-raleway font-bold text-center uppercase">
                     <h1>{currentSchool.title}</h1>
                 </div>
-                <SectionHeader title="UNIT SEKOLAH" as="h2" />
-                <section className="mx-auto max-w-5xl px-4">
-                    <SchoolUnitsGrid units={currentSchool.units} />
-                </section>
+                <div hidden>
+                    <SectionHeader title="UNIT SEKOLAH" as="h2" />
+                    <section className="mx-auto max-w-5xl px-4">
+                        <SchoolUnitsGrid units={currentSchool.units} />
+                    </section>
+                </div>
                 {images.length > 0 && (
                     <section className="mb-16">
                         <SectionHeader title="FASILITAS" />
